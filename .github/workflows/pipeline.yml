@@ -82,15 +82,17 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+          # -p pour le port, -H pour host, et on ignore les erreurs de résolution pendant les tests
+          ssh-keyscan -p ${{ secrets.SSH_PORT }} -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts 2>/dev/null || true
 
       - name: Copy JAR to server
         run: |
-          scp -o StrictHostKeyChecking=no build/*.jar \
+          scp -P ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no \
+            build/*.jar \
             ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.APP_DIR }}/app.jar
 
       - name: Restart app on server using run.sh
         run: |
-          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
+          ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
             cd ${APP_DIR} && ./run.sh
           "
