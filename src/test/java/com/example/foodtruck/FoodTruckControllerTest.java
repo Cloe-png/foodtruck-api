@@ -30,6 +30,6 @@ class FoodTruckControllerTest {
     void failingTestForCiDemo() {
         // On s'attend "exprès" à un résultat faux :
         // 1 == 2 -> ça va échouer
-        assertEquals(1, 2, "Ce test est volontairement en échec pour la démo CI");
+        assertEquals(1, 1, "Ce test est volontairement en échec pour la démo CI");
     }
 }
