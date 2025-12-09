@@ -85,3 +85,4 @@ jobs:
           ssh -p ${{ secrets.SSH_PORT }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
             cd '${{ secrets.APP_DIR }}' && ./run.sh
           "
+          
